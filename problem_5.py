@@ -1,44 +1,52 @@
 class Node:
-    def __init__(self, wordEnd = False):
-        self.wordEnd = wordEnd
-        self.dict = {}
+    def __init__(self, char = "", isRoot = False, isWord = False):
+        self.children = {}
+        self.char = char
+        self.isWord = isWord
 
-    def insert(self, char):
-        if char not in self.dict:
-            self.dict[char] = Node()
+    def insert(self, char, isWord = False):
+        if char not in self.children:
+            self.children[char] = Node(char)
 
 
-    def suffixes(self, suffix = ''):
-        out = []
-        
-        for k in self.dict:
-            if self.dict[k].wordEnd:
-                out.append(suffix + k)
-            out += self.dict[k].suffixes(suffix + k)
-        
-        return out
+    def suffixes(self, word = "", suffixes = [], newCall = True):
+        if newCall:
+            suffixes = []
+
+        for key in self.children:
+            node = self.children[key]
+            if node.isWord:
+                suffixes.append(word + key)
+            if node.children:
+                node.suffixes(word + key, suffixes, False)
+    
+        return suffixes
     
 
 class Trie:
     def __init__(self):
-        self.root = Node()
+        self.root = Node("", True)
 
     def insert(self, word):
-        cNode = self.root
+        currentNode = self.root
+        
         for char in word:
-            cNode.insert(char)
-            cNode = cNode.dict[char]
-        cNode.wordEnd = True
-                
+            currentNode.insert(char)
+            currentNode = currentNode.children[char]
 
-    def find(self, prefix):
-        cNode = self.root
+        currentNode.isWord = True
+
+                
+    def find(self, prefix = ""):
+        currentNode = self.root 
+
         for char in prefix:
-            if char in cNode.dict:
-                cNode = cNode.dict[char]
-            else:
+            if char not in currentNode.children:
                 return Node()
-        return cNode
+            else:
+                currentNode = currentNode.children[char]
+
+        return currentNode
 
 
 trie = Trie()
@@ -47,11 +55,11 @@ wordList = [
     "fun", "function", "factory", 
     "trie", "trigger", "trigonometry", "tripod"
 ]
+
 for word in wordList:
     trie.insert(word)
 
-
-
+# print(trie.find('antagonist'))
 print(trie.find('antagonist').suffixes())
 print(trie.find('fun').suffixes())
 print(trie.find('ant').suffixes())

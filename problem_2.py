@@ -1,35 +1,36 @@
 def binarySearch(array, left, right, target): 
     if right >= left: 
   
-        mid = left + (right - left) // 2
+        middle = (left + right) // 2
   
-        if array[mid] == target: 
-            return mid 
-        elif array[mid] > target: 
-            return binarySearch(array, left, mid-1, target) 
+        if array[middle] == target: 
+            return middle 
+        elif array[middle] < target: 
+            return binarySearch(array, middle + 1, right, target) 
         else: 
-            return binarySearch(array, mid + 1, right, target) 
+            return binarySearch(array, left, middle - 1, target) 
   
     else: 
         return -1
 
 def findPivot(array, left, right): 
-      
-    # base cases 
-    if right < left: 
-        return -1
     if right == left: 
-        return left 
+        return left
+    elif right < left: 
+        return -1
+
+    # print('Array: ', array)
+    # print('Left: ', left)
+    
+    middle = (left + right) // 2 
       
-    mid = int((left + right)/2) 
-      
-    if mid < right and array[mid] > array[mid + 1]: 
-        return mid 
-    if mid > left and array[mid] < array[mid - 1]: 
-        return mid - 1
-    if array[left] >= array[mid]: 
-        return findPivot(array, left, mid - 1) 
-    return findPivot(array, mid + 1, right) 
+    if middle > left and array[middle] < array[middle - 1]: 
+        return middle - 1
+    elif middle < right and array[middle] > array[middle + 1]: 
+        return middle 
+    elif array[left] >= array[middle]: 
+        return findPivot(array, left, middle - 1) 
+    return findPivot(array, middle + 1, right) 
 
 def rotatedArraySearch(array, target): 
   
@@ -38,12 +39,12 @@ def rotatedArraySearch(array, target):
   
     if pivot == -1: 
         return binarySearch(array, 0, n - 1, target)
-  
+
     if array[pivot] == target: 
         return pivot 
-    if array[0] <= target: 
-        return binarySearch(array, 0, pivot - 1, target)
-    return binarySearch(array, pivot + 1, n - 1, target)
+    if array[0] > target: 
+        return binarySearch(array, pivot + 1, n - 1, target)
+    return binarySearch(array, 0, pivot - 1, target)
 
 def linear_search(input_list, number):
     for index, element in enumerate(input_list):

@@ -10,7 +10,7 @@ def singleTraversalSort(array):
             count[2] += 1
     
     sortedArray = []
-    print(count)
+    # print(count)
 
     appendElements(sortedArray, 0, count[0])
     appendElements(sortedArray, 1, count[1])
@@ -24,5 +24,16 @@ def appendElements(array, element, count):
         count -= 1
 
 
-array = [0, 0, 1, 2,0,1,2,0,0,0,2,0,0,1,2,1]
-print(singleTraversalSort(array))
+def test_function(test_case):
+    sorted_array = singleTraversalSort(test_case)
+    print(sorted_array)
+    if sorted_array == sorted(test_case):
+        print("Pass")
+    else:
+        print("Fail")
+
+test_function([0, 0, 2, 2, 2, 1, 1, 1, 2, 0, 2])
+test_function([2, 1, 2, 0, 0, 2, 1, 0, 1, 0, 0, 2, 2, 2, 1, 2, 0, 0, 0, 2, 1, 0, 2, 0, 0, 1])
+test_function([0, 0, 0, 0, 0, 0, 1, 1, 1, 1, 1, 1, 2, 2, 2, 2, 2, 2, 2])
+test_function([])
+test_function([1, 0, 2])
